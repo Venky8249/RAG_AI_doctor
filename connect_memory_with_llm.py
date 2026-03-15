@@ -1,5 +1,5 @@
 import os
-os.environ["TF_USE_LEGACY_KERAS"] = "1"
+
 from langchain_groq import ChatGroq
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
