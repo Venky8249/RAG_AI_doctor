@@ -48,7 +48,7 @@ def main():
             if vectorstore is None:
                 st.error("Failed to load the vector store")
 
-            GROQ_API_KEY =os.environ.get("GROQ_API_KEY")
+            GROQ_API_KEY ="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"
             GROQ_MODEL_NAME = "llama-3.1-8b-instant"  # Change to any supported Groq model
             llm = ChatGroq(
                 model=GROQ_MODEL_NAME,
