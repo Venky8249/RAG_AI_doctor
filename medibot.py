@@ -29,7 +29,7 @@ def set_custom_prompt(custom_prompt_template):
 
 
 def main():
-    st.title("Ask Chatbot!")
+    st.title("Chatbot!")
 
     if 'messages' not in st.session_state:
         st.session_state.messages = []
@@ -48,7 +48,7 @@ def main():
             if vectorstore is None:
                 st.error("Failed to load the vector store")
 
-            GROQ_API_KEY ="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"
+            GROQ_API_KEY =st.secrets["GROQ_API_KEY"]
             GROQ_MODEL_NAME = "llama-3.1-8b-instant"  # Change to any supported Groq model
             llm = ChatGroq(
                 model=GROQ_MODEL_NAME,

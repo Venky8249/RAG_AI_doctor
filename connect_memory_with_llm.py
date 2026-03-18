@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Step 1: Setup Groq LLM
-GROQ_API_KEY = "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"
+GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 GROQ_MODEL_NAME = "llama-3.1-8b-instant"  # Change to any supported Groq model
 
 
