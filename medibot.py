@@ -50,8 +50,8 @@ def main():
             if vectorstore is None:
                 st.error("Vectorstore not loaded. Check if db_faiss exists.")
                 return
-
-            GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", None)
+            #GROQ_API_KEY ="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"
+            GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
             if not GROQ_API_KEY:
                 st.error("Missing GROQ_API_KEY in secrets.")
@@ -66,7 +66,7 @@ def main():
 
             # ✅ Correct prompt for LC 0.2.x
             prompt_template = PromptTemplate(
-                input_variables=["context", "question"],
+                input_variables=["context", "input"],
                 template="""
                 You are a helpful medical assistant.
 
@@ -76,7 +76,7 @@ def main():
                 {context}
 
                 Question:
-                {question}
+                {input}
 
                 Answer:
                 """
@@ -89,7 +89,7 @@ def main():
                 combine_docs_chain
             )
 
-            response = rag_chain.invoke({"question": user_prompt})
+            response = rag_chain.invoke({"input": user_prompt})
 
             # 🔍 Debug (remove later)
             st.write("DEBUG:", response)
