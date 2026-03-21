@@ -58,20 +58,21 @@ def main():
             )
 
             # ✅ FIX: Custom prompt (no hub dependency)
-            prompt_template = PromptTemplate.from_template(
-                """
+            prompt_template = PromptTemplate(
+                input_variables=["context", "question"],
+                template="""
                 You are a helpful medical assistant.
 
-                Use the context below to answer the question accurately.
+                Use the context below to answer.
 
                 Context:
                 {context}
 
                 Question:
-                {input}
+                {question}
 
                 Answer:
-                """
+             """
             )
 
             # Combine documents
@@ -83,9 +84,12 @@ def main():
                 combine_docs_chain
             )
 
-            response = rag_chain.invoke({'input': user_prompt})
+            response = rag_chain.invoke({'question': user_prompt})
+            st.write("DEBUG RESPONSE:", response)
+            result = response.get("answer", "")
 
-            result = response["answer"]
+            if not result.strip():
+                result = "No relevant answer found."
 
             st.chat_message('assistant').markdown(result)
             st.session_state.messages.append({'role': 'assistant', 'content': result})
