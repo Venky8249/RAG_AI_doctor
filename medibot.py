@@ -1,4 +1,6 @@
 import os
+os.environ["LANGCHAIN_PYDANTIC_V1"] = "1"   # 🔥 MUST BE FIRST LINE
+
 import streamlit as st
 
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -44,11 +46,16 @@ def main():
 
         try:
             vectorstore = get_vectorstore()
+
             if vectorstore is None:
-                st.error("Failed to load the vector store")
+                st.error("Vectorstore not loaded. Check if db_faiss exists.")
                 return
 
-            GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+            GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", None)
+
+            if not GROQ_API_KEY:
+                st.error("Missing GROQ_API_KEY in secrets.")
+                return
 
             llm = ChatGroq(
                 model="llama-3.1-8b-instant",
@@ -57,13 +64,13 @@ def main():
                 api_key=GROQ_API_KEY,
             )
 
-            # ✅ FIX: Custom prompt (no hub dependency)
+            # ✅ Correct prompt for LC 0.2.x
             prompt_template = PromptTemplate(
                 input_variables=["context", "question"],
                 template="""
                 You are a helpful medical assistant.
 
-                Use the context below to answer.
+                Use the context below to answer the question.
 
                 Context:
                 {context}
@@ -72,23 +79,24 @@ def main():
                 {question}
 
                 Answer:
-             """
+                """
             )
 
-            # Combine documents
             combine_docs_chain = create_stuff_documents_chain(llm, prompt_template)
 
-            # Retrieval chain
             rag_chain = create_retrieval_chain(
                 vectorstore.as_retriever(search_kwargs={'k': 3}),
                 combine_docs_chain
             )
 
-            response = rag_chain.invoke({'question': user_prompt})
-            st.write("DEBUG RESPONSE:", response)
+            response = rag_chain.invoke({"question": user_prompt})
+
+            # 🔍 Debug (remove later)
+            st.write("DEBUG:", response)
+
             result = response.get("answer", "")
 
-            if not result.strip():
+            if not result or not result.strip():
                 result = "No relevant answer found."
 
             st.chat_message('assistant').markdown(result)
