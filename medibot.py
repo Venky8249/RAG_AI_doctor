@@ -1,5 +1,6 @@
 import os
-os.environ["LANGCHAIN_PYDANTIC_V1"] = "1"   # 🔥 MUST BE FIRST LINE
+os.environ["LANGCHAIN_PYDANTIC_V1"] = "1"  
+os.environ["PYDANTIC_VERSION"] = "1"# 🔥 MUST BE FIRST LINE
 
 import streamlit as st
 
