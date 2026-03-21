@@ -50,7 +50,7 @@ def main():
             if vectorstore is None:
                 st.error("Vectorstore not loaded. Check if db_faiss exists.")
                 return
-            #GROQ_API_KEY ="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"
+            #GROQ_API_KEY ="api-key"
             GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
 
             if not GROQ_API_KEY:

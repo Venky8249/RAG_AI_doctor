@@ -13,7 +13,7 @@ load_dotenv()
 
 # Step 1: Setup Groq LLM
 GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
-#GROQ_API_KEY ="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"
+#GROQ_API_KEY ="api-key"
 GROQ_MODEL_NAME = "llama-3.1-8b-instant"  # Change to any supported Groq model
 
 
